@@ -1,21 +1,11 @@
-apiVersion: apps/v1
 kind: Deployment
+apiVersion: extensions/v1beta1
 metadata:
   name: nfs-client-provisioner
-  labels:
-    app: nfs-client-provisioner
-  # replace with namespace where provisioner is deployed
-  namespace: kubernetes-plugin
 spec:
   replicas: 1
-  selector:
-    matchLabels:
-      app: nfs-client-provisioner
   strategy:
     type: Recreate
-  selector:
-    matchLabels:
-      app: nfs-client-provisioner
   template:
     metadata:
       labels:
@@ -24,7 +14,7 @@ spec:
       serviceAccountName: nfs-client-provisioner
       containers:
         - name: nfs-client-provisioner
-          image: quay.io/external_storage/nfs-client-provisioner:latest
+          image: quay.io/external_storage/nfs-client-provisioner-arm:latest
           volumeMounts:
             - name: nfs-client-root
               mountPath: /persistentvolumes
@@ -32,11 +22,11 @@ spec:
             - name: PROVISIONER_NAME
               value: fuseim.pri/ifs
             - name: NFS_SERVER
-              value: 192.168.1.146
+              value: 10.10.10.60
             - name: NFS_PATH
-              value: /data/k8s-sc
+              value: /ifs/kubernetes
       volumes:
         - name: nfs-client-root
           nfs:
-            server: 192.168.1.146
-            path: /data/k8s-sc
+            server: 10.10.10.60
+            path: /ifs/kubernetes

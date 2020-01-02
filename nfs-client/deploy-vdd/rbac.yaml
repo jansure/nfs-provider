@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: nfs-client-provisioner
+  name: nfs-client-provisioner-glory
   # replace with namespace where provisioner is deployed
-  namespace: kubernetes-plugin
+  namespace: nfs-provider-glory
 ---
 kind: ClusterRole
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
-  name: nfs-client-provisioner-runner
+  name: nfs-client-provisioner-runner-glory
 rules:
   - apiGroups: [""]
     resources: ["persistentvolumes"]
@@ -24,40 +24,40 @@ rules:
     verbs: ["create", "update", "patch"]
 ---
 kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
-  name: run-nfs-client-provisioner
+  name: run-nfs-client-provisioner-glory
 subjects:
   - kind: ServiceAccount
-    name: nfs-client-provisioner
+    name: nfs-client-provisioner-glory
     # replace with namespace where provisioner is deployed
-    namespace: kubernetes-plugin
+    namespace: nfs-provider-glory
 roleRef:
   kind: ClusterRole
-  name: nfs-client-provisioner-runner
+  name: nfs-client-provisioner-runner-glory
   apiGroup: rbac.authorization.k8s.io
 ---
 kind: Role
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
-  name: leader-locking-nfs-client-provisioner
+  name: leader-locking-nfs-client-provisioner-glory
     # replace with namespace where provisioner is deployed
-  namespace: kubernetes-plugin
+  namespace: nfs-provider-glory
 rules:
   - apiGroups: [""]
     resources: ["endpoints"]
     verbs: ["get", "list", "watch", "create", "update", "patch"]
 ---
 kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
-  name: leader-locking-nfs-client-provisioner
+  name: leader-locking-nfs-client-provisioner-glory
 subjects:
   - kind: ServiceAccount
-    name: nfs-client-provisioner
+    name: nfs-client-provisioner-glory
     # replace with namespace where provisioner is deployed
-    namespace: kubernetes-plugin
+    namespace: nfs-provider-glory
 roleRef:
   kind: Role
-  name: leader-locking-nfs-client-provisioner
+  name: leader-locking-nfs-client-provisioner-glory
   apiGroup: rbac.authorization.k8s.io

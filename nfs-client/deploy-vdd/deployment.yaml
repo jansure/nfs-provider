@@ -1,42 +1,42 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nfs-client-provisioner
+  name: nfs-client-provisioner-glory
   labels:
-    app: nfs-client-provisioner
+    app: nfs-client-provisioner-glory
   # replace with namespace where provisioner is deployed
-  namespace: kubernetes-plugin
+  namespace: nfs-provider-glory
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nfs-client-provisioner
+      app: nfs-client-provisioner-glory
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app: nfs-client-provisioner
+      app: nfs-client-provisioner-glory
   template:
     metadata:
       labels:
-        app: nfs-client-provisioner
+        app: nfs-client-provisioner-glory
     spec:
-      serviceAccountName: nfs-client-provisioner
+      serviceAccountName: nfs-client-provisioner-glory
       containers:
-        - name: nfs-client-provisioner
+        - name: nfs-client-provisioner-glory
           image: quay.io/external_storage/nfs-client-provisioner:latest
           volumeMounts:
             - name: nfs-client-root
               mountPath: /persistentvolumes
           env:
             - name: PROVISIONER_NAME
-              value: fuseim.pri/ifs
+              value: glory-sc
             - name: NFS_SERVER
               value: 192.168.1.146
             - name: NFS_PATH
-              value: /data/k8s-sc
+              value: /data2
       volumes:
         - name: nfs-client-root
           nfs:
             server: 192.168.1.146
-            path: /data/k8s-sc
+            path: /data2
