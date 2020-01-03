@@ -45,4 +45,8 @@ Participation in the Kubernetes community is governed by the [Kubernetes Code of
 plus:
 1、直接到external-storage/nfs-client/deploy中，执行kubectl apply -f rbac.yaml 可以编辑rbac.yaml,编辑自己的namespace，然后同样在deploynment.yaml文件中修改namespace，涉及到各种资源的name的也要rbac.yaml和depoyment.yaml保持一致
 2、修改class.yaml，记得deployment.yaml里边的PROVISIONER_NAME 要与 class.yaml里的provisioner保持一致。
-3、若出现forbiden user get endpoint之类的错误就去改一下external-storage/nfs-client/deploy/object下的的clusterrole.yaml的rules下增加：
+3、若出现forbiden user get endpoint之类的错误就去改一下external-storage/nfs-client/deploy/object下的的clusterrole.yaml的rules下增加：  - apiGroups: [""]
+    resources: ["endpoints"]
+    verbs: ["get", "list", "watch", "create", "update", "patch"]
+4、若出现unauthorized则需求rbac.yaml里的ClusterRole的apiVersion为rbac.authorization.k8s.io/v1beta， 把ClusterRoleBinding的apiVersion改为：rbac.authorization.k8s.io/v1beta1 ，把role的apiVersion修改为：rbac.authorization.k8s.io/v1beta1 ，把RoleBinding的apiVersion改为：rbac.authorization.k8s.io/v1beta1 
+
